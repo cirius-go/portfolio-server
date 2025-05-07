@@ -30,7 +30,7 @@ require (
 	github.com/spf13/cobra v1.8.1
 	github.com/swaggo/echo-swagger v1.4.1
 	github.com/swaggo/swag v1.16.4
-	golang.org/x/crypto v0.33.0
+	golang.org/x/crypto v0.35.0
 	gorm.io/driver/postgres v1.5.11
 	gorm.io/gorm v1.25.12
 )
