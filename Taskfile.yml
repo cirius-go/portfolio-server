@@ -1,0 +1,113 @@
+version: "3"
+vars:
+  PROJECT: cirius-go/portfolio-server
+tasks:
+  default:
+    cmds:
+      - task -l
+    silent: true
+  up:
+    cmds:
+      - ./scripts/build.sh
+  log:
+    cmds:
+      - ./scripts/watchlog.sh
+  down:
+    cmds:
+      - ./scripts/clean.sh
+  start:
+    cmds:
+      - ./scripts/start.sh
+  specs:
+    cmds:
+      - swag init --parseInternal --parseDependency --parseGoList --propertyStrategy snakecase --dir cmd/api/,internal/api/,internal/api/apicms/,internal/dto/,internal/dto/dtocms/ -o docs/swagger
+      - swag fmt
+  migrate:
+    cmds:
+      - go run ./cmd/workers/migrate {{ .CLI_ARGS }}
+  migrate:du:
+    cmds:
+      - go run ./cmd/workers/migrate down
+      - go run ./cmd/workers/migrate up
+  gen:cms:
+    cmds:
+      - go run ./cmd/codegen api-module cms {{ .CLI_ARGS }}
+      - go generate ./...
+  gen:cms-api:
+    cmds:
+      - go run ./cmd/codegen api-method cms {{ .CLI_ARGS }}
+      - go generate ./...
+  env:edit:
+    desc: "Edit environment"
+    cmds:
+      - esc env edit {{ .PROJECT }}/{{ .STAGE | default "dev" }}
+  env:show:
+    desc: "Show environment"
+    cmds:
+      - esc env open  {{ .PROJECT }}/{{ .STAGE | default "dev" }} -f dotenv
+  env:set:
+    desc: "Set environment"
+    cmds:
+      - esc env set {{ .PROJECT }}/{{ .STAGE | default "dev" }} {{ .CLI_ARGS }}
+  env:rm:
+    desc: 'Remove environment'
+    cmds:
+      - esc env rm {{ .PROJECT }}/{{ .STAGE | default "dev" }} {{ .CLI_ARGS }}
+  env:dev:edit:
+    desc: "Edit dev environment"
+    cmds:
+      - task: env:edit
+        vars:
+          STAGE: dev
+  env:dev:show:
+    desc: "Show dev environment"
+    cmds:
+      - task: env:show
+        vars:
+          STAGE: dev
+  env:dev:set:
+    desc: "Set dev environment"
+    cmds:
+      - task: env:set
+        vars:
+          STAGE: dev
+  env:dev:rm:
+    desc: 'Remove dev environment'
+    cmds:
+      - task: env:rm
+        vars:
+          STAGE: dev
+  deploy:
+    cmds:
+      - task: build:api
+        vars:
+          TARGET: "lambda"
+      - task: build:workers
+        vars:
+          TARGET: "lambda"
+      - pulumi up -C ./cmd/infra/aws -s cirius-go/portfolio-server/{{ .STAGE | default "dev" }}
+  deploy:dev:
+    cmds:
+      - task: deploy
+        vars:
+          STAGE: dev
+  destroy:dev:
+    cmds:
+      - pulumi destroy -C ./cmd/infra/aws -s cirius-go/portfolio-server/dev
+  build:api:
+    cmds:
+      - TARGET={{ .TARGET }} ./scripts/build-api.sh
+  build:workers:
+    cmds:
+      - TARGET={{ .TARGET }} ./scripts/build-worker.sh
+  build:lambda:
+    cmds:
+      - task: build:api
+        vars:
+          TARGET: "lambda"
+      - task: build:workers
+        vars:
+          TARGET: "lambda"
+  logs:
+    cmds:
+      - aws logs tail "/aws/lambda/portfolio-server-dev-api" --follow --format json

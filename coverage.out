@@ -1,0 +1,23 @@
+mode: atomic
+github.com/cirius-go/portfolio-server/pkg/codegen/ioext/ioext.go:17.37,17.51 1 1
+github.com/cirius-go/portfolio-server/pkg/codegen/ioext/ioext.go:19.49,21.2 1 2
+github.com/cirius-go/portfolio-server/pkg/codegen/ioext/ioext.go:38.51,39.18 1 2
+github.com/cirius-go/portfolio-server/pkg/codegen/ioext/ioext.go:39.18,40.23 1 1
+github.com/cirius-go/portfolio-server/pkg/codegen/ioext/ioext.go:40.23,45.4 1 1
+github.com/cirius-go/portfolio-server/pkg/codegen/ioext/ioext.go:47.2,47.14 1 2
+github.com/cirius-go/portfolio-server/pkg/codegen/ioext/ioext.go:51.17,53.2 1 0
+github.com/cirius-go/portfolio-server/pkg/codegen/ioext/ioext.go:69.36,71.2 1 1
+github.com/cirius-go/portfolio-server/pkg/codegen/ioext/ioext.go:74.36,76.2 1 1
+github.com/cirius-go/portfolio-server/pkg/codegen/ioext/ioext.go:79.88,107.2 2 0
+github.com/cirius-go/portfolio-server/pkg/codegen/ioext/ioext.go:109.49,111.16 2 0
+github.com/cirius-go/portfolio-server/pkg/codegen/ioext/ioext.go:111.16,113.3 1 0
+github.com/cirius-go/portfolio-server/pkg/codegen/ioext/ioext.go:115.2,115.34 1 0
+github.com/cirius-go/portfolio-server/pkg/codegen/ioext/ioext.go:115.34,117.3 1 0
+github.com/cirius-go/portfolio-server/pkg/codegen/ioext/ioext.go:119.2,119.58 1 0
+github.com/cirius-go/portfolio-server/pkg/codegen/ioext/ioext.go:127.45,129.2 1 0
+github.com/cirius-go/portfolio-server/pkg/codegen/ioext/ioext.go:132.59,134.2 1 0
+github.com/cirius-go/portfolio-server/pkg/codegen/ioext/ioext.go:136.65,137.22 1 0
+github.com/cirius-go/portfolio-server/pkg/codegen/ioext/ioext.go:137.22,138.58 1 0
+github.com/cirius-go/portfolio-server/pkg/codegen/ioext/ioext.go:141.2,142.38 2 0
+github.com/cirius-go/portfolio-server/pkg/codegen/ioext/ioext.go:142.38,144.3 1 0
+github.com/cirius-go/portfolio-server/pkg/codegen/ioext/ioext.go:146.2,146.15 1 0

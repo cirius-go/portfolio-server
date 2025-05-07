@@ -1,0 +1,13 @@
+repos:
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        args: ["--baseline", ".secrets.baseline"]
+  - repo: local
+    hooks:
+      - id: try-build lambda function
+        name: Build lambda
+        language: system
+        entry: task build:lambda
+        pass_filenames: false

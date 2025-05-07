@@ -1,0 +1,12 @@
+.gojen
+.env
+tmp
+.air
+# dbeaver
+.project
+.dbeaver
+.build
+.DS_Store
+.direnv/*
+.codegen
+.coverage.out

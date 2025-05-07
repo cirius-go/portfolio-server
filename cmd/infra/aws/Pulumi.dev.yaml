@@ -1,0 +1,3 @@
+environment:
+  - aws/dev
+  - portfolio-server/dev
