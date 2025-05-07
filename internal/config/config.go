@@ -81,6 +81,14 @@ func IsLocal() bool {
 	return !slice.Includes(stage, "dev", "uat", "prod")
 }
 
+// GetStage returns the stage of the server.
+func GetStage() string {
+	if stage == "" {
+		return "local"
+	}
+	return stage
+}
+
 // Load loads the configuration from environment variables and
 // parameter store.
 func Load(envFiles ...string) (*Config, error) {

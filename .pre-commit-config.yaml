@@ -4,6 +4,7 @@ repos:
     hooks:
       - id: detect-secrets
         args: ["--baseline", ".secrets.baseline"]
+        exclude: ^\.env\.example$
   - repo: local
     hooks:
       - id: try-build lambda function

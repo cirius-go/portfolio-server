@@ -9,12 +9,14 @@ import (
 type Project struct {
 	service.Service
 	uow uow.UnitOfWork
+	enf RBACEnforcer
 }
 
 // NewProject creates a new instance of Project service.
-func NewProject(uow uow.UnitOfWork) *Project {
+func NewProject(uow uow.UnitOfWork, enf RBACEnforcer) *Project {
 	s := &Project{
 		uow: uow,
+		enf: enf,
 	}
 	return s
 }

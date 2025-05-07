@@ -24,12 +24,14 @@ func mkServiceImplGT() codegen.GroupTemplate {
 type {{ $service_name }} struct {
 	service.Service
 	uow uow.UnitOfWork
+	enf RBACEnforcer
 }
 
 // New{{ $service_name }} creates a new instance of {{ $service_name }} service.
-func New{{ $service_name }}(uow uow.UnitOfWork) *{{ $service_name }} {
+func New{{ $service_name }}(uow uow.UnitOfWork, enf RBACEnforcer) *{{ $service_name }} {
 	s := &{{ $service_name }}{
 		uow: uow,
+		enf: enf,
 	}
 	return s
 }`,
@@ -83,12 +85,14 @@ func mkServiceGT() codegen.GroupTemplate {
 type {{ $service_name }} struct {
 	service.Service
 	uow uow.UnitOfWork
+	enf RBACEnforcer
 }
 
 // New{{ $service_name }} creates a new instance of {{ $service_name }} service.
-func New{{ $service_name }}(uow uow.UnitOfWork) *{{ $service_name }} {
+func New{{ $service_name }}(uow uow.UnitOfWork, enf RBACEnforcer) *{{ $service_name }} {
 	s := &{{ $service_name }}{
 		uow: uow,
+		enf: enf,
 	}
 	return s
 }`,
@@ -101,7 +105,7 @@ func New{{ $service_name }}(uow uow.UnitOfWork) *{{ $service_name }} {
 							Placeholder:     "Define{{ .subdomain | siCamel }}Services",
 						},
 						ContentTmpl: `{{- $service_name := .entity | siCamel -}}
-				{{ .entity | sLowerCamel }}Svc = service{{ .subdomain | gopkg }}.New{{ $service_name }}(unitOfWork)`,
+				{{ .entity | sLowerCamel }}Svc = service{{ .subdomain | gopkg }}.New{{ $service_name }}(unitOfWork, enf)`,
 					},
 				},
 			},
