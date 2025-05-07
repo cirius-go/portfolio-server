@@ -9,12 +9,14 @@ import (
 type Article struct {
 	service.Service
 	uow uow.UnitOfWork
+	enf RBACEnforcer
 }
 
 // NewArticle creates a new instance of Article service.
-func NewArticle(uow uow.UnitOfWork) *Article {
+func NewArticle(uow uow.UnitOfWork, enf RBACEnforcer) *Article {
 	s := &Article{
 		uow: uow,
+		enf: enf,
 	}
 	return s
 }

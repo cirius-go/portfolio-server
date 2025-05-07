@@ -9,12 +9,14 @@ import (
 type User struct {
 	service.Service
 	uow uow.UnitOfWork
+	enf RBACEnforcer
 }
 
 // NewUser creates a new instance of User service.
-func NewUser(uow uow.UnitOfWork) *User {
+func NewUser(uow uow.UnitOfWork, enf RBACEnforcer) *User {
 	s := &User{
 		uow: uow,
+		enf: enf,
 	}
 	return s
 }

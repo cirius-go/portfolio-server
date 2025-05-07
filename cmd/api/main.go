@@ -18,10 +18,13 @@ import (
 	"flag"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	awscfg "github.com/aws/aws-sdk-go-v2/config"
 	echoadapter "github.com/awslabs/aws-lambda-go-api-proxy/echo"
+	"github.com/casbin/casbin"
 	"github.com/labstack/echo/v4"
 	echoswag "github.com/swaggo/echo-swagger"
 
@@ -34,6 +37,7 @@ import (
 	"github.com/cirius-go/portfolio-server/pkg/db"
 	"github.com/cirius-go/portfolio-server/pkg/errors"
 	"github.com/cirius-go/portfolio-server/pkg/server"
+	"github.com/cirius-go/portfolio-server/util"
 )
 
 var (
@@ -48,6 +52,8 @@ func main() {
 	cfg, err := config.Load(*cfgFile)
 	panicIf(err)
 
+	fmt.Println("Stage:", config.GetStage())
+
 	// connect to the database
 	pg, err := db.NewPostgres(cfg.PGDB)
 	panicIf(err)
@@ -57,26 +63,31 @@ func main() {
 	unitOfWork := uow.New(pg.DB)
 
 	// init rbac enforcer
-	// enf := casbin.NewEnforcer(
-	// 	util.NewRBACModel(),
-	// 	config.IsLocal(), // debug if local
-	// )
+	enf := casbin.NewEnforcer(
+		util.NewRBACModel(),
+		config.IsLocal(), // debug if local
+	)
+
+	// init context
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
 
 	// aws config
-	// awsCfg, err := awscfg.LoadDefaultConfig(context.Background())
-	// panicIf(err)
-	//
-	// if config.IsLocal() {
-	// 	awsCfg, err = config.GetAWSExecutionLocalConfig()
-	// 	panicIf(err)
-	// }
+	awsCfg, err := awscfg.LoadDefaultConfig(ctx)
+	panicIf(err)
+
+	if config.IsLocal() {
+		awsCfg, err = config.GetAWSConfigWithExecRole(ctx)
+		panicIf(err)
+		fmt.Println("AWS Runtime Environment:", awsCfg.RuntimeEnvironment)
+	}
 
 	// create services
 	var (
 		//+codegen=DefineCmsServices
-		userSvc    = servicecms.NewUser(unitOfWork)
-		projectSvc = servicecms.NewProject(unitOfWork)
-		articleSvc = servicecms.NewArticle(unitOfWork)
+		userSvc    = servicecms.NewUser(unitOfWork, enf)
+		projectSvc = servicecms.NewProject(unitOfWork, enf)
+		articleSvc = servicecms.NewArticle(unitOfWork, enf)
 	)
 
 	// new http server with config
